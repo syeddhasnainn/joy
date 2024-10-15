@@ -92,8 +92,8 @@ export default function Home() {
       
       <div className="w-full overflow-y-auto mb-4">
         {!messages.length && (
-        <div className="absolute">joy.</div>
-      )}
+          <div className="text-center text-gray-500 mt-8">joy.</div>
+        )}
         {messages.map((message, index) => (
           <div 
             key={index} 
@@ -128,16 +128,19 @@ export default function Home() {
           </div>
         )}
       </div>
+      <div className="fixed bottom-0 max-w-xl w-full">
       <div className="w-full relative ">
         <textarea
           name="question"
           placeholder="Ask a question"
-          className="w-full h-24 bg-slate-600 rounded-md p-2"
+          className="w-full h-24 bg-[#27272A] rounded-md p-2"
           onKeyDown={handleKeyDown}
           disabled={isLoading}
         />
         <div className="absolute bottom-0 left-0 text-slate-400 p-2 mb-2">Llama 3.2 3B Instruct Turbo</div>
       </div>
+      </div>
+      
 
       
     </main>
