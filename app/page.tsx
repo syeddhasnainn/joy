@@ -8,7 +8,7 @@ export default function Home() {
   const [messages, setMessages] = useState<{role: string, content: string}[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [streamingContent, setStreamingContent] = useState("");
-  const [image, setImage] = useState<"">("")
+
   const handleSubmit = async (question: string) => {
     const userMessage = {role: "user", content: question}
     setIsLoading(true);
@@ -16,54 +16,36 @@ export default function Home() {
     setStreamingContent("");
 
     try {
-      if (question.startsWith("/image")) {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", 
-          },
-          body: JSON.stringify({ messages: [...messages, userMessage] }),
-        });
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", 
+        },
+        body: JSON.stringify({ messages: [...messages, userMessage] }),
+      });
 
-        const data = await response.json();
-        const imageUrl = data.response.data[0]?.url;
-        setImage(imageUrl);
-        return;
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      else {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", 
-          },
-          body: JSON.stringify({ messages: [...messages, userMessage] }),
-        });
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-  
-        const reader = response.body?.getReader();
-        if (!reader) {
-          throw new Error("Response body is not readable");
-        }
-  
-        let fullContent = "";
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const text = new TextDecoder().decode(value);
-          fullContent += text;
-          setStreamingContent(fullContent);
-        }
-  
-        setMessages(prevMessages => [
-          ...prevMessages,
-          { role: "assistant", content: fullContent }
-        ]);
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error("Response body is not readable");
       }
-      
+
+      let fullContent = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const text = new TextDecoder().decode(value);
+        fullContent += text;
+        setStreamingContent(fullContent);
+      }
+
+      setMessages(prevMessages => [
+        ...prevMessages,
+        { role: "assistant", content: fullContent }
+      ]);
     } catch (error) {
       console.error("Error:", error);
       setMessages(prevMessages => [
@@ -112,10 +94,6 @@ export default function Home() {
             </div>
           </div>
         ))}
-
-        {image && <div>
-          <img src={image} alt="" />
-        </div>}
         
         {streamingContent && (
           <div className="flex items-start gap-2 mb-2">
