@@ -1,9 +1,8 @@
 "use client";
-import { useConversationStore } from "@/app/page";
+import { useConversationStore } from "@/app/store/conversation";
 import { Markdown } from "@/components/markdown";
-import { Message } from "@/app/page";
+import type { Message } from "@/app/store/conversation";
 import { useState } from "react";
-import { Sparkle } from "lucide-react";
 
 export default function Chat() {
   const {

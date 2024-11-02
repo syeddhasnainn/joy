@@ -1,6 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
 import Together from "together-ai";
-import { OpenAI } from "openai";
 
 const together = new Together({
   apiKey: process.env["TOGETHER_API_KEY"],
