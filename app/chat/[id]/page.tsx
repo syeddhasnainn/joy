@@ -3,12 +3,16 @@ import { useConversationStore } from "@/app/page";
 import { Markdown } from "@/components/markdown";
 import { Message } from "@/app/page";
 import { useState } from "react";
-import { Sidebar } from "@/components/Sidebar";
 import { Sparkle } from "lucide-react";
 
 export default function Chat() {
-  const { conversation, question, setQuestion, setConversation, updateLastMessage } =
-    useConversationStore();
+  const {
+    conversation,
+    question,
+    setQuestion,
+    setConversation,
+    updateLastMessage,
+  } = useConversationStore();
   const [isStreaming, setIsStreaming] = useState(false);
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -57,28 +61,22 @@ export default function Chat() {
   };
 
   return (
-    <div className="my-4 max-w-2xl text-md">
+    <div className="my-4 max-w-2xl text-md flex min-h-screen  mx-auto">
       <div className="flex flex-col gap-4 mb-24">
         {conversation.map((message, index) => (
           <div
             key={index}
-            className={`p-4 rounded-lg ${
+            className={`p-4 rounded-2xl ${
               message.role === "user"
-                ? "bg-[#252526] text-neutral-300"
-                : "bg-[#2d2d2e] text-white"
+                ? "bg-[#21201C] text-neutral-300"
+                : "bg-[#343432] text-white"
             }`}
           >
-            
             {message.role === "user" ? (
-              
               <div>
-                <div className="flex items-start gap-2">
-                  <Sparkle className="flex-shrink-0 w-5 h-5" />
-                {message.content}
-                </div>
-                </div>
+                <div className="flex items-start gap-2">{message.content}</div>
+              </div>
             ) : (
-              
               <Markdown>{message.content}</Markdown>
             )}
           </div>
@@ -86,19 +84,19 @@ export default function Chat() {
       </div>
 
       <div className="input fixed bottom-0 left-0 right-0 max-w-2xl mx-auto p-4">
-        <div className="relative">
+        <div className="relative flex items-center">
           <textarea
             autoFocus
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask follow-up"
-            className="w-full bg-[#353636] border border-neutral-500 rounded-md py-2 pl-4 pr-10 text-sm text-white placeholder-gray-400 resize-none"
+            placeholder="Ask a follow-up"
+            className="w-full bg-[#393937] border border-neutral-500 rounded-3xl py-4 pl-4 pr-10 font-medium text-sm placeholder-[#A29F97] resize-none outline-none"
             rows={1}
             disabled={isStreaming}
           ></textarea>
           <button
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
             onClick={() => handleKeyDown}
             disabled={isStreaming}
           >
